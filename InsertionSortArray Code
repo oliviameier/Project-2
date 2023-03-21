@@ -13,14 +13,18 @@ public class InsertionSortArray {
 	//main method
 	public static void main(String[] args) throws IOException {
 		
-		//read numbers from file and create array
-		File file = new File("random10digits.txt");
-	    Scanner input = new Scanner(file);
-	    System.out.println(file);
+		//prompt user to enter file name for inputs
+		Scanner input = new Scanner(System.in);
+		System.out.print("Enter file name: ");
+		
+		//read file into array 
+		String name = input.next();
+		File file = new File(name);
+	    Scanner array = new Scanner(file);
 	    int[] arrS = new int[10];
 	    int i = 0;
-	    while(input.hasNextInt()){
-	    	arrS[i++] = input.nextInt();
+	    while(array.hasNextInt()){
+	    	arrS[i++] =array.nextInt();
 	    }
 		
 	    //print original unsorted array 
