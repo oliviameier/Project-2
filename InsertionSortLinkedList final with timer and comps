@@ -1,0 +1,112 @@
+/******************************************************************************
+Author: Eugene Onchagwa
+Name: InsertionSort using Linked List
+Date: 20 March 2023
+Class: COMSC.340 Analysis of Algorithm
+*******************************************************************************/
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class LinkedList {
+    //first node of the list
+    Node head;
+    //size of the list
+    int size;
+    
+    private class Node {
+        //gives int value to nodes
+        int value;
+        //gets node
+        Node next;
+        
+        public Node(int value) {
+            this.value = value;
+            this.next = null;
+        }
+    }
+    //add node to list
+    public void add(int value) {
+        //create new node
+        Node newNode = new Node(value);
+        //checks to see if there is a head node if not, new node becomes head node
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node currentNode = head;
+            while (currentNode.next != null) {
+                currentNode = currentNode.next;
+            }
+            currentNode.next = newNode;
+        }
+        size++;
+    }
+    //add values from txt file
+    public void addFromFile(String filename) {
+        File file = new File(filename);
+        try {
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextInt()) {
+                int value = scanner.nextInt();
+                add(value);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("error");
+        }
+    }
+    //sorts the values using insertion
+    public void insertionSort() {
+      int bOperations = 0;
+        if (head == null || head.next == null) {
+            return;
+        }
+        Node newHead = null;
+        Node current = head;
+        while (current != null) {
+            Node next = current.next;
+            bOperations++;
+            
+            if (newHead == null || current.value < newHead.value) {
+                current.next = newHead;
+                newHead = current;
+            } else {
+                Node temp = newHead;
+                while (temp.next != null && current.value >= temp.next.value) {
+                    temp = temp.next;
+                    bOperations++;
+                }
+                current.next = temp.next;
+                temp.next = current;
+                bOperations+=2;
+            }
+            current = next;
+            bOperations++;
+        }
+        head = newHead;
+        System.out.println("The num of basic operations are " + bOperations);
+    }
+    //prints the values
+    public void printList() {
+        Node currentNode = head;
+        while (currentNode != null) {
+            System.out.print(currentNode.value + " ");
+            currentNode = currentNode.next;
+        }
+        System.out.println();
+    }
+    
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        LinkedList list = new LinkedList();
+        System.out.print("Enter file name: ");
+        String name = input.next();
+        list.addFromFile(name);
+        
+        long startTime = System.nanoTime();
+        list.insertionSort();
+        long endTime = System.nanoTime();
+        long total = endTime - startTime;
+        list.printList();
+        System.out.println("it took " + total + " ns");
+    }
+}
